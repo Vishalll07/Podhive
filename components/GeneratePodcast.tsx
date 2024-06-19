@@ -20,8 +20,21 @@ const useGeneratePodcast = ({
 
 
   const generatePodcast = async () => {
+   setIsGenerating(true);
+   setAudio('');
    
-    
+   if(!voicePrompt) {
+    //todo: show error message
+    return setIsGenerating(false);
+   }
+    try {
+      
+    } catch (error) {
+      console.log('Error generating podcast', error)
+      //todo: show error message
+      setIsGenerating(false);
+    }
+
   }
 
  return { isGenerating, generatePodcast }
