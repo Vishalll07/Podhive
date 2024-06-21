@@ -8,6 +8,8 @@ import { Loader } from 'lucide-react'
 //import { api } from '@/convex/_generated/api'
 //import { v4 as uuidv4 } from 'uuid';
 import { useToast } from "@/components/ui/use-toast"
+import { useAction } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 //import { useUploadFiles } from '@xixixao/uploadstuff/react';
 
@@ -17,7 +19,7 @@ const useGeneratePodcast = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast()
 
-
+const getPodcastAudio = useAction(api.openai.generateAudioAction)
 
   const generatePodcast = async () => {
    setIsGenerating(true);
@@ -27,7 +29,12 @@ const useGeneratePodcast = ({
     //todo: show error message
     return setIsGenerating(false);
    }
+
     try {
+      const response = await getPodcastAudio({
+        voice: voiceType,
+        input: voicePrompt
+      })
       
     } catch (error) {
       console.log('Error generating podcast', error)
