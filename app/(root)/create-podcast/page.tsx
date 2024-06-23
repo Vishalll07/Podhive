@@ -57,7 +57,7 @@ const CreatePodcast = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
- // const createPodcast = useMutation(api.podcasts.createPodcast)
+  const createPodcast = useMutation(api.podcasts.createPodcast)
 
   const { toast } = useToast()
   // 1. Define your form.
@@ -178,13 +178,7 @@ const CreatePodcast = () => {
                 setAudioDuration={setAudioDuration}
               />
 
-              <GenerateThumbnail 
-               setImage={setImageUrl}
-               setImageStorageId={setImageStorageId}
-               image={imageUrl}
-               imagePrompt={imagePrompt}
-               setImagePrompt={setImagePrompt}
-              />
+              <GenerateThumbnail />
 
               <div className="mt-10 w-full">
                 <Button type="submit" className="text-16 w-full bg-orange-1 py-4 font-extrabold text-white-1 transition-all duration-500 hover:bg-black-1">
