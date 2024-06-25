@@ -5,10 +5,9 @@ import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
 import { useAction, useMutation } from 'convex/react'
-import { v4 as uuidv4 } from "uuid" ;
-import { useToast } from "@/components/ui/use-toast"
 import { api } from '@/convex/_generated/api'
-import { generateUploadUrl } from '@/convex/files'
+import { v4 as uuidv4 } from 'uuid';
+import { useToast } from "@/components/ui/use-toast"
 
 import { useUploadFiles } from '@xixixao/uploadstuff/react';
 
@@ -18,30 +17,31 @@ const useGeneratePodcast = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast()
 
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl); 
-  const { startUpload } = useUploadFiles(generateUploadUrl )
- 
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const { startUpload } = useUploadFiles(generateUploadUrl)
 
   const getPodcastAudio = useAction(api.openai.generateAudioAction)
+
   const getAudioUrl = useMutation(api.podcasts.getUrl);
 
   const generatePodcast = async () => {
-   setIsGenerating(true);
-   setAudio('');
-   
-   if(!voicePrompt) {
-    toast({
-      title: "Please provide a voiceType to generate a podcast",
-    })
-    return setIsGenerating(false);
-   }
+    setIsGenerating(true);
+    setAudio('');
+
+    if(!voicePrompt) {
+      toast({
+        title: "Please provide a voiceType to generate a podcast",
+      })
+      return setIsGenerating(false);
+    }
 
     try {
       const response = await getPodcastAudio({
         voice: voiceType,
         input: voicePrompt
       })
-      const blob =new Blob([response],{ type:'audio/mpeg' });
+
+      const blob = new Blob([response], { type: 'audio/mpeg' });
       const fileName = `podcast-${uuidv4()}.mp3`;
       const file = new File([blob], fileName, { type: 'audio/mpeg' });
 
@@ -54,24 +54,24 @@ const useGeneratePodcast = ({
       setAudio(audioUrl!);
       setIsGenerating(false);
       toast({
-        title: "Yay!! Podcast Generated Successfully!!",
+        title: "Podcast generated successfully",
       })
     } catch (error) {
       console.log('Error generating podcast', error)
       toast({
-        title: "Error Creating a podcast",
-        variant:'destructive',
+        title: "Error creating a podcast",
+        variant: 'destructive',
       })
       setIsGenerating(false);
     }
-
+    
   }
 
- return { isGenerating, generatePodcast }
+  return { isGenerating, generatePodcast }
 }
 
 const GeneratePodcast = (props: GeneratePodcastProps) => {
- const { isGenerating, generatePodcast } = useGeneratePodcast(props);
+  const { isGenerating, generatePodcast } = useGeneratePodcast(props);
 
   return (
     <div>
@@ -112,4 +112,4 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
   )
 }
 
-export default GeneratePodcast
+export default GeneratePodcast;
